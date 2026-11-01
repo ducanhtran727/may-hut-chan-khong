@@ -26,3 +26,13 @@ Meta Pixel/CAPI cần ID/tài khoản thật và cơ chế đồng ý phù hợp
 Mở `dist/index.html` để xem giao diện hoặc chạy `python -m http.server 8080 --directory dist` và truy cập `http://localhost:8080`. Video YouTube cần chạy trên HTTP/HTTPS với referrer hợp lệ.
 
 Thư mục `dist/` chứa website tĩnh; `integrations/` chứa Apps Script nhận đơn; `.openai/hosting.json` lưu cấu hình Sites hiện tại.
+
+## Deploy trên Netlify
+
+Repository đã có `netlify.toml` ở thư mục gốc. Netlify sẽ xuất bản trực tiếp thư mục `dist/`, không cần build hoặc cài thư viện.
+
+- Base directory: `.` (thư mục gốc repository).
+- Build command: để trống.
+- Publish directory: `dist`.
+
+Không dùng `vacuum-landing/dist`: repository này không có thư mục `vacuum-landing`. Sau khi lấy commit cấu hình mới, chạy deploy lại từ nhánh `main`.
