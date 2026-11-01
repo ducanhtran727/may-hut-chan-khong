@@ -1,5 +1,14 @@
 let pendingRequest = null;
 const form = document.querySelector("#order-form");
+const orderSuccessDialog = document.querySelector("#order-success");
+for (const button of document.querySelectorAll("[data-close-order-success]")) {
+  button.addEventListener("click", () => orderSuccessDialog.close());
+}
+orderSuccessDialog.addEventListener("click", event => {
+  if (event.target !== orderSuccessDialog) return;
+  const bounds = orderSuccessDialog.getBoundingClientRect();
+  if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) orderSuccessDialog.close();
+});
 const packages = {
   single: { label: "1 máy + 10 túi", price: 339000, quantity: 1 },
   double: { label: "2 máy + 20 túi", price: 599000, quantity: 2 },
@@ -83,11 +92,11 @@ form.addEventListener("submit", async (event) => {
       const result = await response.json();
       if (!response.ok || result.ok !== true || result.requestId !== payload.requestId)
         throw new Error(result.error || "request_not_confirmed");
-      status.textContent =
-        "Cửa hàng đã nhận yêu cầu đặt hàng và sẽ liên hệ để xác nhận với bạn.";
+      status.textContent = "";
       pendingRequest = null;
       form.reset();
       updateTotal();
+      orderSuccessDialog.showModal();
     } catch (error) {
       const setupErrors = ["missing_sheet_id", "not_configured", "sheet_not_found", "sheet_headers_mismatch"];
       if (setupErrors.includes(error.message)) {
@@ -148,9 +157,7 @@ form.addEventListener("submit", async (event) => {
 if (window.LANDING_CONFIG?.googleSheetsEndpoint) {
   const orderNote = document.querySelector(".order-note p");
   if (orderNote) orderNote.textContent = "Cửa hàng sẽ liên hệ xác nhận yêu cầu đặt hàng của bạn.";
-  document.querySelector(".form-privacy").textContent =
-    "Thông tin được gửi đến cửa hàng để tư vấn theo yêu cầu của bạn. Không lưu thông tin cá nhân vào trình duyệt.";
-  document.querySelector(".submit").innerHTML =
+document.querySelector(".submit").innerHTML =
     "Đặt hàng <span>↗</span>";
 }
 
