@@ -84,7 +84,7 @@ form.addEventListener("submit", async (event) => {
       if (!response.ok || result.ok !== true || result.requestId !== payload.requestId)
         throw new Error("Request not confirmed");
       status.textContent =
-        "Cửa hàng đã nhận yêu cầu tư vấn. Đây chưa phải xác nhận đơn hàng; cửa hàng sẽ liên hệ theo thông tin bạn cung cấp.";
+        "Cửa hàng đã nhận yêu cầu đặt hàng và sẽ liên hệ để xác nhận với bạn.";
       pendingRequest = null;
       form.reset();
       updateTotal();
@@ -94,7 +94,7 @@ form.addEventListener("submit", async (event) => {
     } finally {
       clearTimeout(timer);
       button.disabled = false;
-      button.innerHTML = "Gửi yêu cầu tư vấn <span>↗</span>";
+      button.innerHTML = "Đặt hàng <span>↗</span>";
     }
     return;
   }
@@ -140,12 +140,12 @@ form.addEventListener("submit", async (event) => {
 });
 
 if (window.LANDING_CONFIG?.googleSheetsEndpoint) {
-  document.querySelector(".order-note p").textContent =
-    "Gửi nhu cầu để cửa hàng liên hệ tư vấn và xác nhận mẫu máy, giá cùng chính sách bán hàng trước khi đặt mua.";
+  const orderNote = document.querySelector(".order-note p");
+  if (orderNote) orderNote.textContent = "Cửa hàng sẽ liên hệ xác nhận yêu cầu đặt hàng của bạn.";
   document.querySelector(".form-privacy").textContent =
     "Thông tin được gửi đến cửa hàng để tư vấn theo yêu cầu của bạn. Không lưu thông tin cá nhân vào trình duyệt.";
   document.querySelector(".submit").innerHTML =
-    "Gửi yêu cầu tư vấn <span>↗</span>";
+    "Đặt hàng <span>↗</span>";
 }
 
 const reviewDialog = document.querySelector("#review-lightbox");
