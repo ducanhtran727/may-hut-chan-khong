@@ -2,6 +2,8 @@
 
 Mã: `integrations/google-sheets.gs`.
 
+Bản hiện tại đã điền sẵn ID file nhận đơn và tự tạo tab `DonHang_6Cot` cùng tiêu đề khi nhận yêu cầu hợp lệ đầu tiên. Không cần tạo tab/cột bằng tay hoặc cấu hình Script properties.
+
 ## Chuẩn bị bảng như ảnh
 
 Hàng 1, từ A đến F:
@@ -16,7 +18,7 @@ Chữ hoa/thường trong tiêu đề đều được chấp nhận (ví dụ `g
 
 1. Mở Sheet → **Tiện ích mở rộng → Apps Script**. Thay nội dung `Code.gs` bằng toàn bộ mã mới trong `integrations/google-sheets.gs`.
 2. Điền ID Sheet vào dòng đầu: `const SPREADSHEET_ID = "ID_SHEET_CUA_BAN";`. ID nằm giữa `/d/` và `/edit` trong URL Sheet. Nếu đã cấu hình `SPREADSHEET_ID` ở Script properties, có thể để dòng này trống.
-3. `const SHEET_NAME = "";` mặc định nhận đơn ở **tab đầu tiên**. Nếu muốn tab khác, điền chính xác tên tab, ví dụ `const SHEET_NAME = "DonHang";`.
+3. `const SHEET_NAME = "DonHang_6Cot";` nhận đơn ở tab `DonHang_6Cot`. Mã tự tạo tab này nếu chưa có; các tab cũ được giữ nguyên.
 4. Chọn **Deploy → New deployment → Web app**; **Execute as: Me**; **Who has access: Anyone**. Lưu và cấp quyền cho script. Không cần chạy `doPost` trực tiếp trong editor.
 5. Sao chép URL kết thúc bằng `/exec`, điền vào `googleSheetsEndpoint` trong `dist/config.js`, rồi đẩy GitHub để Netlify triển khai. Nếu cập nhật một deployment cũ, chọn **Deploy → Manage deployments → Edit → New version → Deploy** và giữ URL `/exec` cũ.
 6. Gửi một đơn thử từ website và kiểm tra xuất hiện đúng một hàng mới trong Sheet. Chỉ sau bước này mới xác nhận kết nối hoạt động.

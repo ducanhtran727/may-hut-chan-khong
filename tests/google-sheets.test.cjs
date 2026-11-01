@@ -29,7 +29,7 @@ function fixture(options = {}) {
   const context = {
     PropertiesService: {getScriptProperties: () => ({getProperty: () => 'test-sheet'})},
     LockService: {getScriptLock: () => ({tryLock: () => !options.busy, hasLock: () => !options.busy, releaseLock: () => released++})},
-    SpreadsheetApp: {openById: () => ({getSheets: () => [sheet]}), flush() {}},
+    SpreadsheetApp: {openById: () => ({getSheetByName: () => options.missingTab ? null : sheet, insertSheet: name => { assert.equal(name,"DonHang_6Cot"); return sheet; }}), flush() {}},
     Utilities: {formatDate(date, zone, format) { assert.equal(zone,'Asia/Ho_Chi_Minh'); assert.equal(format,'dd/MM/yyyy HH:mm:ss'); return '02/11/2026 15:00:00'; }},
     ContentService: {MimeType: {JSON:'json'}, createTextOutput: body => ({body, setMimeType() {return this;}})}
   };
@@ -59,3 +59,5 @@ test('neutralizes spreadsheet formulas in text fields', () => {
 test('refuses old headers without modifying existing rows', () => {const f=fixture({oldSchema:true});assert.equal(f.send({}).error,'sheet_headers_mismatch'); assert.equal(f.rows.length,1);});
 test('initializes an empty sheet with the six headers', () => {const f=fixture({empty:true});assert.equal(f.send({}).ok,true);assert.equal(f.rows[0].length,6);assert.equal(f.rows[0][4],'Gói mua');});
 test('busy lock does not write', () => {const f=fixture({busy:true});assert.equal(f.send({}).error,'busy_retry');assert.equal(f.rows.length,1);});
+
+test("creates missing order tab and its six headers", () => {const f=fixture({empty:true,missingTab:true});assert.equal(f.send({}).ok,true);assert.equal(f.rows.length,2);assert.equal(f.rows[0].length,6);});

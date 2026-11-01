@@ -1,8 +1,6 @@
-// Điền ID trong URL Google Sheet: /spreadsheets/d/ID_SHEET/edit.
-// Có thể để trống nếu đã lưu SPREADSHEET_ID trong Script properties.
-const SPREADSHEET_ID = "";
-// Để trống để dùng tab đầu tiên, hoặc điền chính xác tên tab nhận đơn.
-const SHEET_NAME = "";
+// Đã điền sẵn file nhận đơn. Tab và tiêu đề được tạo tự động.
+const SPREADSHEET_ID = "1eBl0AG1CrX-5ENGt3quAjtDDr9Af_Nx0ywr2n69hsUo";
+const SHEET_NAME = "DonHang_6Cot";
 const ORDER_HEADERS = ["Họ tên", "Điện thoại", "Địa chỉ", "Số máy", "Gói mua", "Thời gian đặt"];
 const ORDER_PACKAGES = {
   single: {quantity: 1, label: "1 máy + tặng 10 túi — 339.000đ"},
@@ -31,7 +29,7 @@ function doPost(e) {
     lock = LockService.getScriptLock();
     if (!lock.tryLock(10000)) return reply_({ok: false, error: "busy_retry"});
     const book = SpreadsheetApp.openById(sheetId);
-    const sheet = SHEET_NAME ? book.getSheetByName(SHEET_NAME) : book.getSheets()[0];
+    const sheet = book.getSheetByName(SHEET_NAME) || book.insertSheet(SHEET_NAME);
     if (!sheet) return reply_({ok: false, error: "sheet_not_found"});
     if (sheet.getLastRow() === 0) {
       sheet.getRange(1, 1, 1, 6).setValues([ORDER_HEADERS]).setFontWeight("bold");
