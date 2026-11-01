@@ -82,15 +82,21 @@ form.addEventListener("submit", async (event) => {
       });
       const result = await response.json();
       if (!response.ok || result.ok !== true || result.requestId !== payload.requestId)
-        throw new Error("Request not confirmed");
+        throw new Error(result.error || "request_not_confirmed");
       status.textContent =
         "Cửa hàng đã nhận yêu cầu đặt hàng và sẽ liên hệ để xác nhận với bạn.";
       pendingRequest = null;
       form.reset();
       updateTotal();
-    } catch {
-      status.textContent =
-        "Chưa xác nhận được yêu cầu. Vui lòng thử lại hoặc liên hệ cửa hàng; thông tin bạn nhập vẫn được giữ nguyên.";
+    } catch (error) {
+      const setupErrors = ["missing_sheet_id", "not_configured", "sheet_not_found", "sheet_headers_mismatch"];
+      if (setupErrors.includes(error.message)) {
+        status.textContent = "Hệ thống đặt hàng chưa sẵn sàng. Vui lòng liên hệ cửa hàng; thông tin bạn nhập vẫn được giữ nguyên.";
+      } else if (error.message === "invalid_fields") {
+        status.textContent = "Vui lòng kiểm tra lại họ tên, số điện thoại, địa chỉ và gói máy trước khi gửi lại.";
+      } else {
+        status.textContent = "Chưa xác nhận được yêu cầu. Vui lòng thử lại hoặc liên hệ cửa hàng; thông tin bạn nhập vẫn được giữ nguyên.";
+      }
     } finally {
       clearTimeout(timer);
       button.disabled = false;

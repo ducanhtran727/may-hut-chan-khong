@@ -31,6 +31,10 @@ Chữ hoa/thường trong tiêu đề đều được chấp nhận (ví dụ `g
 
 Frontend gửi `{requestId, name, phone, address, packageId}`. Mã trả `{"ok":true,"requestId":"..."}` khi ghi thành công, hoặc `duplicate:true` nếu đã có đơn cùng mã. Website giữ nguyên requestId khi thử lại sau lỗi mạng.
 
+## Sửa lỗi thiếu ID mà không đổi deployment
+
+Nếu URL `/exec` trả `missing_sheet_id`, mở đúng dự án Apps Script đã tạo URL đó → **Project Settings → Script properties → Add script property**. Điền tên `SPREADSHEET_ID`, giá trị là ID Sheet nằm giữa `/d/` và `/edit` trong URL, rồi **Save script properties**. Mã đọc cấu hình này trong mỗi lần nhận đơn; nếu chỉ sửa Script property, không cần tạo version/deployment mới. Properties của dự án khác không áp dụng cho URL hiện tại.
+
 ## Nếu chưa nhận được đơn
 
 - `missing_sheet_id`: chưa điền ID Sheet hoặc Script properties.
