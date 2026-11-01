@@ -12,7 +12,7 @@ Giữ các phần sản phẩm, hướng dẫn, ảnh thực tế, đánh giá t
 
 ## Nhận đơn và vận hành
 
-Xem `SETUP-GOOGLE-SHEETS.md` để triển khai `integrations/google-sheets.gs`. Chưa có URL Apps Script hoạt động thì form chưa gửi đơn đến Google Sheets. Script tự xác định giá từ gói máy đã chọn, bỏ qua tổng tiền client, chống trùng bằng requestId.
+Xem `SETUP-GOOGLE-SHEETS.md` để triển khai `integrations/google-sheets.gs`. Chưa có URL Apps Script hoạt động thì form chưa gửi đơn đến Google Sheets. Script chỉ ghi 6 cột: Họ tên, Điện thoại, Địa chỉ, Số máy, Gói mua, Thời gian đặt. Số máy/gói mua được xác định phía máy chủ; chống gửi trùng bằng ghi chú ô thời gian, không thêm cột.
 
 Trước chạy quảng cáo: xác nhận lại giá và chính sách với người bán; triển khai đầu nhận đơn; kiểm tra đơn thử thực sự xuất hiện trong Sheet; kiểm tra lỗi mạng và điện thoại. Không công bố kết nối đã hoạt động khi chưa kiểm tra.
 

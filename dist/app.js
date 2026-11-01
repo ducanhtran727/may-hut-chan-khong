@@ -68,23 +68,12 @@ form.addEventListener("submit", async (event) => {
         name,
         phone,
         address,
-        ...chosen,
-        note: form.elements.note.value.trim(),
+        packageId: chosen.packageId,
       };
       const fingerprint = JSON.stringify(values);
       if (!pendingRequest || pendingRequest.fingerprint !== fingerprint)
         pendingRequest = { fingerprint, id: crypto.randomUUID() };
       const payload = { ...values, requestId: pendingRequest.id };
-      for (const key of [
-        "utm_source",
-        "utm_medium",
-        "utm_campaign",
-        "utm_content",
-        "utm_term",
-        "utm_id",
-        "fbclid",
-      ])
-        payload[key] = params.get(key) || "";
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -92,7 +81,7 @@ form.addEventListener("submit", async (event) => {
         signal: controller.signal,
       });
       const result = await response.json();
-      if (!response.ok || result.ok !== true)
+      if (!response.ok || result.ok !== true || result.requestId !== payload.requestId)
         throw new Error("Request not confirmed");
       status.textContent =
         "Cửa hàng đã nhận yêu cầu tư vấn. Đây chưa phải xác nhận đơn hàng; cửa hàng sẽ liên hệ theo thông tin bạn cung cấp.";
